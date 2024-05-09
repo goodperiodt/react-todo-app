@@ -89,7 +89,7 @@ const TodoTemplate = () => {
 
     setTodos(copyTodos);
     ---------------------------*/
-    /*---------2. 배열 고차함수로 처리*/
+    /*---------2. 배열 고차함수로 처리
 
     setTodos(
       todos.map((todo) =>
@@ -98,6 +98,18 @@ const TodoTemplate = () => {
           : todo,
       ),
     );
+
+    // ------------------------------------ */
+
+    // 내가 직접 작성한 것
+    const copyTodos = [...todos];
+    copyTodos.map((cTodo) => {
+      if (cTodo.id === id) {
+        cTodo.done = !cTodo.done;
+      }
+      return setTodos([...copyTodos]);
+    });
+
     // todos.map((todo)=> todo.id === id) {
     // if (todos.filter((todo) => todo.id === id)) {
     //   return setTodos(todos.filter((todo) => !todo.done));

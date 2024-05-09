@@ -5,6 +5,7 @@ import cn from 'classnames';
 
 const TodoInput = ({ addTodo }) => {
   const [open, setOpen] = useState(false);
+
   // 할 일 입력창에 입력한 내용을 표현하는 상태값
   const [todoText, setTodoText] = useState('');
 
@@ -61,7 +62,8 @@ const TodoInput = ({ addTodo }) => {
 
         // className={cn('insert-btn', { open: open })}
         className={cn('insert-btn', { open })}
-        // 빽틱으로 처리하는 방법도 작성해볼 것!!
+        // 빽틱으로 처리하는 방법
+        // className={`insert-btn ${open ? 'open' : ''}`}
 
         onClick={onToggle}
       >
