@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import '../scss/TodoTemplate.scss';
+import '../../scss/TodoTemplate.scss';
+
 import TodoHeader from './TodoHeader';
 import TodoMain from './TodoMain';
 import TodoInput from './TodoInput';
@@ -9,6 +10,7 @@ const TodoTemplate = () => {
 
   // 기본 요청 url을 전역변수로 선언
   const API_BASE_URL = 'http://localhost:8181/api/todos';
+
   const [todos, setTodos] = useState([]);
 
   // id값 시퀀스 함수 (DB 연동시키면 필요없게 됨.)
@@ -76,18 +78,39 @@ const TodoTemplate = () => {
 
   // 할 일 삭제 처리 함수
   const removeTodo = (id) => {
+    fetch(`${API_BASE_URL}/${id}`, {
+      method: 'DELETE', // 요청 메서드는 DELETE 다.
+    })
+      .then((res) => res.json())
+      .then((data) => setTodos(data.todos))
+      .catch((err) => {
+        console.log('err: ', err);
+        alert('잘못된 삭제 요청입니다!');
+      });
+
     /*
     const removedTodos = todos.filter(
       (todo) => todo.id !== id,
     );
     setTodos(removedTodos);
     */
-    setTodos(todos.filter((todo) => todo.id !== id));
+    // setTodos(todos.filter((todo) => todo.id !== id));
   };
 
   // 할 일 체크 처리 함수
-  const checkTodo = (id) => {
-    /*---------1. 반복문으로 처리
+  const checkTodo = (id, done) => {
+    fetch(API_BASE_URL, {
+      method: 'PATCH',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        id, // id 그대로 전달
+        done: !done,
+      }),
+    })
+      .then((res) => res.json())
+      .then((json) => setTodos(json.todos));
+  };
+  /*---------1. 반복문으로 처리
     const copyTodos = [...todos];
 
     for (let cTodo of copyTodos) {
@@ -98,7 +121,7 @@ const TodoTemplate = () => {
 
     setTodos(copyTodos);
     ---------------------------*/
-    /*---------2. 배열 고차함수로 처리
+  /*---------2. 배열 고차함수로 처리
 
     setTodos(
       todos.map((todo) =>
@@ -107,23 +130,24 @@ const TodoTemplate = () => {
           : todo,
       ),
     );
-
+  
     // ------------------------------------ */
 
-    // 내가 직접 작성한 것
-    const copyTodos = [...todos];
-    copyTodos.map((cTodo) => {
-      if (cTodo.id === id) {
-        cTodo.done = !cTodo.done;
-      }
-      return setTodos([...copyTodos]);
-    });
+  // 내가 직접 작성한 것
+  /*
+  const copyTodos = [...todos];
+  copyTodos.map((cTodo) => {
+    if (cTodo.id === id) {
+      cTodo.done = !cTodo.done;
+    }
+    return setTodos([...copyTodos]);
+  });
+  */
 
-    // todos.map((todo)=> todo.id === id) {
-    // if (todos.filter((todo) => todo.id === id)) {
-    //   return setTodos(todos.filter((todo) => !todo.done));
-    // }
-  };
+  // todos.map((todo)=> todo.id === id) {
+  // if (todos.filter((todo) => todo.id === id)) {
+  //   return setTodos(todos.filter((todo) => !todo.done));
+  // }
 
   /*
   const count = 0;

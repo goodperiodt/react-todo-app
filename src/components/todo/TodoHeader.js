@@ -1,5 +1,5 @@
 import React from 'react';
-import '../scss/TodoHeader.scss';
+import '../../scss/TodoHeader.scss';
 
 const TodoHeader = ({ count }) => {
   // Thu May 09 2024 16:29:58 GMT+0900 (한국 표준시)
